@@ -67,6 +67,25 @@ export const NanoBananaImageSchema = z
     },
   );
 
+// Nano Banana Pro - Unified text-to-image and image editing
+export const NanoBananaProImageSchema = z.object({
+  prompt: z.string().min(1).max(5000),
+  image_input: z.array(z.string().url()).max(8).optional(),
+  aspect_ratio: z.enum([
+    "1:1",
+    "2:3",
+    "3:2",
+    "3:4",
+    "4:3",
+    "4:5",
+    "5:4",
+    "9:16",
+    "16:9",
+    "21:9",
+  ]).default("1:1").optional(),
+  resolution: z.enum(["1K", "2K", "4K"]).default("1K").optional(),
+  output_format: z.enum(["png", "jpg"]).default("png").optional(),
+});
 export const Veo3GenerateSchema = z.object({
   prompt: z.string().min(1).max(2000),
   imageUrls: z.array(z.string().url()).min(1).max(2).optional(),
@@ -523,6 +542,7 @@ export const OpenAI4oImageSchema = z
 
 // TypeScript types
 export type NanoBananaImageRequest = z.infer<typeof NanoBananaImageSchema>;
+export type NanoBananaProImageRequest = z.infer<typeof NanoBananaProImageSchema>;
 export type Veo3GenerateRequest = z.infer<typeof Veo3GenerateSchema>;
 export type SunoGenerateRequest = z.infer<typeof SunoGenerateSchema>;
 export type ElevenLabsTTSRequest = z.infer<typeof ElevenLabsTTSSchema>;
@@ -793,6 +813,8 @@ export interface TaskRecord {
     | "nano-banana-edit"
     | "nano-banana-upscale"
     | "nano-banana-image"
+    | "nano-banana-pro-generate"
+    | "nano-banana-pro-edit"
     | "veo3"
     | "suno"
     | "elevenlabs-tts"
